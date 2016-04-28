@@ -1,8 +1,13 @@
 package com.imba.imbalibrary;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -20,6 +25,11 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
         if (status == HttpURLConnection.HTTP_OK) {
 
             if (!TextUtils.isEmpty(path)) {
+                File file = new File(path);
+                if (!file.getParentFile().exists()) {
+                    file.getParentFile().mkdirs();
+                }
+                file.createNewFile();
                 FileOutputStream out = new FileOutputStream(path);
                 InputStream is = conn.getInputStream();
                 byte[] buffer = new byte[2048];
@@ -39,7 +49,7 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                 is.close();
                 out.flush();
                 out.close();
-                bindData(path);
+                return bindData(path);
 
             } else {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -55,11 +65,12 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                 out.flush();
                 out.close();
                 String result = new String(out.toByteArray());
-                bindData(result);
+                return bindData(result);
             }
+        } else {
+            return null;
         }
 
-        return null;
     }
 
     @Override
@@ -72,4 +83,5 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
         this.path = s;
         return this;
     }
+
 }
