@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * Created by zace on 2016/4/26.
+ * Created by zace on 2015/4/26.
  */
 public abstract class UserCallBack extends AbstractCallBack<User> {
     @Override

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 
 /**
- * Created by zace on 2016/4/26.
+ * Created by zace on 2015/4/26.
  */
 public class RequestTask extends AsyncTask<Void, Integer, Object> {
 
@@ -23,8 +23,13 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
     @Override
     protected Object doInBackground(Void... params) {
         try {
-            HttpURLConnection connection =  ImbaHttp.excute(request);
-            return request.getCallBack().parsr(connection);
+            HttpURLConnection connection = ImbaHttp.excute(request);
+            return request.getCallBack().parsr(connection, new OnProgressUpdateListener() {
+                @Override
+                public void onProgressUpdaet(int curLen, int totalLen) {
+                    publishProgress(curLen, totalLen);
+                }
+            });
         } catch (Exception e) {
             return e;
         }
@@ -38,5 +43,14 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
         } else {
             request.getCallBack().onSuccess(o);
         }
+    }
+
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+
+        request.getCallBack().onProgressUpdate(values[0], values[1]);
+
     }
 }

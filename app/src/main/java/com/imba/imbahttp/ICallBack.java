@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 /**
- * Created by zace on 2016/4/26.
+ * Created by zace on 2015/4/26.
  */
 public interface ICallBack<T> {
 
@@ -12,5 +12,7 @@ public interface ICallBack<T> {
 
     void onFailure(Exception e);
 
-    T parsr(HttpURLConnection connection) throws IOException, Exception;
+    T parsr(HttpURLConnection connection, OnProgressUpdateListener listener) throws IOException, Exception;
+
+    void onProgressUpdate(long currentLen, long totalLen);
 }
