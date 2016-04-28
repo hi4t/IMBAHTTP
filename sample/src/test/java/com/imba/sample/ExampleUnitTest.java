@@ -1,4 +1,4 @@
-package com.imba.imbahttp;
+package com.imba.sample;
 
 import org.junit.Test;
 
