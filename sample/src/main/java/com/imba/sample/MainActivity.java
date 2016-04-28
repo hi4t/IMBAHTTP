@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.imba.exception.AppException;
 import com.imba.imbalibrary.FileCallBack;
 import com.imba.imbalibrary.Request;
 import com.imba.imbalibrary.RequestTask;
@@ -16,7 +17,7 @@ import com.imba.util.PermissionsUtil;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivityMainActivit";
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(AppException e) {
                 e.printStackTrace();
             }
 
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "currentLen=" + currentLen + "******totalLen=" + totalLen);
             }
         }.setFilePath(path));
+        request.setOnGlobleExceptionListener(this);
         RequestTask task = new RequestTask(request);
         task.execute();
     }

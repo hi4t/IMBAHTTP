@@ -2,6 +2,8 @@ package com.imba.imbalibrary;
 
 import android.os.AsyncTask;
 
+import com.imba.exception.AppException;
+
 import java.net.HttpURLConnection;
 
 /**
@@ -38,8 +40,12 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        if (o instanceof Exception) {
-            request.getCallBack().onFailure((Exception) o);
+        if (o instanceof AppException) {
+            if (request.getListener() != null) {
+                request.getListener().handleException((AppException) o);
+            } else {
+                request.getCallBack().onFailure((AppException) o);
+            }
         } else {
             request.getCallBack().onSuccess(o);
         }

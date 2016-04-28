@@ -11,6 +11,15 @@ public class Request {
     private Map<String, String> header;
     private String content;
     private ICallBack callBack;
+    private OnGlobleExceptionListener listener;
+
+    public OnGlobleExceptionListener getListener() {
+        return listener;
+    }
+
+    public void setOnGlobleExceptionListener(OnGlobleExceptionListener listener) {
+        this.listener = listener;
+    }
 
     public enum RequestMethod {GET, POST, DELETE, PUT}
 
