@@ -1,4 +1,4 @@
-package com.imba.imbahttp;
+package com.imba.imbalibrary;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

@@ -1,4 +1,4 @@
-package com.imba.imbahttp;
+package com.imba.imbalibrary;
 
 import com.google.gson.Gson;
 

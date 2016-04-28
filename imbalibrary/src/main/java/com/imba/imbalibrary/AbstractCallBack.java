@@ -1,11 +1,10 @@
-package com.imba.imbahttp;
+package com.imba.imbalibrary;
 
 import android.text.TextUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 /**
