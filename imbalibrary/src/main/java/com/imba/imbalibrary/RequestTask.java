@@ -24,6 +24,10 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
 
     @Override
     protected Object doInBackground(Void... params) {
+        return request(0);
+    }
+
+    private Object request(int retry) {
         try {
             HttpURLConnection connection = ImbaHttp.excute(request);
             return request.getCallBack().parsr(connection, new OnProgressUpdateListener() {
@@ -32,10 +36,17 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
                     publishProgress(curLen, totalLen);
                 }
             });
-        } catch (Exception e) {
+        } catch (AppException e) {
+            if (e.getType() == AppException.ErrorType.TIMEOUT) {
+                if (retry < request.getMaxRetryCount()) {
+                    retry++;
+                    return request(retry);
+                }
+            }
             return e;
         }
     }
+
 
     @Override
     protected void onPostExecute(Object o) {
