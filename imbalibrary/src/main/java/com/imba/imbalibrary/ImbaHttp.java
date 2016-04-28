@@ -5,6 +5,7 @@ import android.webkit.URLUtil;
 import com.imba.exception.AppException;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,7 +19,7 @@ public class ImbaHttp {
     public static HttpURLConnection excute(Request request) throws AppException {
 
         if (!URLUtil.isNetworkUrl(request.getUrl())) {
-            throw new AppException("url:" + request.getUrl() + "is not valid");
+            throw new AppException(AppException.ErrorType.NET, "url:" + request.getUrl() + "is not valid");
         }
 
         switch (request.getMethod()) {
@@ -42,8 +43,10 @@ public class ImbaHttp {
             conn.setConnectTimeout(15 * 1000);
             conn.setReadTimeout(15 * 1000);
             addHeader(conn, request.getHeader());
+        } catch (InterruptedIOException e) {
+            throw new AppException(AppException.ErrorType.TIMEOUT, e.getMessage());
         } catch (Exception e) {
-            throw new AppException(e.getMessage());
+            throw new AppException(AppException.ErrorType.SERVER, e.getMessage());
         }
 
         return conn;
@@ -63,8 +66,10 @@ public class ImbaHttp {
 
             OutputStream os = conn.getOutputStream();
             os.write(request.getContent().getBytes());
+        } catch (InterruptedIOException e) {
+            throw new AppException(AppException.ErrorType.TIMEOUT, e.getMessage());
         } catch (Exception e) {
-            throw new AppException(e.getMessage());
+            throw new AppException(AppException.ErrorType.SERVER, e.getMessage());
         }
 
         return conn;

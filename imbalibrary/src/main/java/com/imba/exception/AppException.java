@@ -8,14 +8,28 @@ public class AppException extends Exception {
     private int status;
     private String errMsg;
 
-    public AppException(int status, String errMsg) {
+    public enum ErrorType {TIMEOUT, SERVER, IO, JSON, FILENOTFOUND,NET}
+
+    private ErrorType type;
+
+    public ErrorType getType() {
+        return type;
+    }
+
+    public void setType(ErrorType type) {
+        this.type = type;
+    }
+
+    public AppException(ErrorType type, int status, String errMsg) {
         super(errMsg);
+        this.type = type;
         this.status = status;
         this.errMsg = errMsg;
     }
 
-    public AppException(String detailMessage) {
+    public AppException(ErrorType type, String detailMessage) {
         super(detailMessage);
+        this.type = type;
     }
 
 

@@ -10,8 +10,13 @@ public class Request {
     private String url;
     private Map<String, String> header;
     private String content;
+    private int maxRetryCount = 5;
     private ICallBack callBack;
     private OnGlobleExceptionListener listener;
+
+    public int getMaxRetryCount() {
+        return maxRetryCount;
+    }
 
     public OnGlobleExceptionListener getListener() {
         return listener;
