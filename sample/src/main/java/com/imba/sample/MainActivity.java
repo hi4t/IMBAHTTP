@@ -3,7 +3,6 @@ package com.imba.sample;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import com.imba.exception.AppException;
 import com.imba.imbalibrary.FileCallBack;
 import com.imba.imbalibrary.Request;
+import com.imba.imbalibrary.RequestManager;
 import com.imba.imbalibrary.RequestTask;
 import com.imba.util.PermissionsUtil;
 
@@ -64,8 +64,16 @@ public class MainActivity extends BaseActivity {
         Log.i(TAG, path);
         request.setCallBack(new FileCallBack() {
 
+
             @Override
-            public String postResult(String s) {//可以不重写，如果不需要在子线程对数据进行操作的话
+            public String preRequest() {
+                //TODO check from db before request
+                return null;
+            }
+
+            @Override
+            public String postResult(String s) {
+                //TODO insert into db
                 return super.postResult(s);
             }
 
@@ -85,8 +93,9 @@ public class MainActivity extends BaseActivity {
             }
         }.setFilePath(path));
         request.setOnGlobleExceptionListener(this);
-        RequestTask task = new RequestTask(request);
-        task.execute();
-        request.cancel();
+//        RequestTask task = new RequestTask(request);
+//        task.execute();
+//        request.cancel(true);
+        RequestManager.getInstance().performRequest(request);
     }
 }

@@ -1,6 +1,7 @@
 package com.imba.imbalibrary;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * Created by zace on 2015/4/26.
@@ -15,6 +16,7 @@ public class Request {
     private OnGlobleExceptionListener listener;
     private boolean isCancel;
     private String tag;
+    private RequestTask task;
 
     public void setTag(String tag) {
         this.tag = tag;
@@ -36,9 +38,12 @@ public class Request {
         this.listener = listener;
     }
 
-    public void cancel() {
+    protected void cancel(boolean force) {
         this.isCancel = true;
         this.callBack.cancel(true);
+        if (force && task != null) {
+            task.cancel(force);
+        }
     }
 
     public boolean checkIsCanceled() {
@@ -47,6 +52,11 @@ public class Request {
 
     public String getTag() {
         return this.tag;
+    }
+
+    public void excute(Executor mExcutor) {
+        task = new RequestTask(this);
+        task.executeOnExecutor(mExcutor);
     }
 
     public enum RequestMethod {GET, POST, DELETE, PUT}

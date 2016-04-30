@@ -20,5 +20,13 @@ public interface ICallBack<T> {
 
     void cancel(boolean b);
 
+    /**
+     * before onSuccess
+     *
+     * @param t
+     * @return
+     */
     T postResult(T t);
+
+    T preRequest();
 }

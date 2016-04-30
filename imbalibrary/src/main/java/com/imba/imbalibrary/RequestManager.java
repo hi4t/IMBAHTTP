@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by zace on 2015/4/30.
@@ -13,6 +15,7 @@ public class RequestManager {
 
     private static RequestManager requestManager;
     private HashMap<String, ArrayList<Request>> requestList = new HashMap<>();
+    private Executor mExcutor;
 
     public static RequestManager getInstance() {
         if (requestManager == null) {
@@ -23,12 +26,12 @@ public class RequestManager {
     }
 
     private RequestManager() {
+        mExcutor = Executors.newFixedThreadPool(10);
     }
 
 
-    private void performRequest(Request request) {
-        RequestTask task = new RequestTask(request);
-        task.execute();
+    public void performRequest(Request request) {
+        request.excute(mExcutor);
 
         if (!requestList.containsKey(request.getTag())) {
             ArrayList<Request> list = new ArrayList<>();
@@ -39,7 +42,11 @@ public class RequestManager {
         requestList.get(request.getTag()).add(request);
     }
 
-    private void cancelRequest(String tag) {
+    public void cancelRequest(String tag) {
+        cancelRequest(tag, false);
+    }
+
+    public void cancelRequest(String tag, boolean force) {
         if (TextUtils.isEmpty(tag)) {
             return;
         }
@@ -48,19 +55,19 @@ public class RequestManager {
             ArrayList<Request> list = requestList.remove(tag);
             for (Request request : list) {
                 if (!request.checkIsCanceled() && tag.equals(request.getTag())) {
-                    request.cancel();
+                    request.cancel(force);
                 }
 
             }
         }
     }
 
-    private void cancelAll() {
+    public void cancelAll() {
         for (Map.Entry<String, ArrayList<Request>> entry : requestList.entrySet()) {
             ArrayList<Request> list = entry.getValue();
             for (Request request : list) {
                 if (!request.checkIsCanceled()) {
-                    request.cancel();
+                    request.cancel(true);
                 }
             }
         }

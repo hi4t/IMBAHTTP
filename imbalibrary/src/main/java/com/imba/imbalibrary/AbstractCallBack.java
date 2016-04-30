@@ -88,6 +88,11 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
     }
 
     @Override
+    public T preRequest() {
+        return null;
+    }
+
+    @Override
     public T postResult(T t) {
         return t;
     }
