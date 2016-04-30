@@ -16,10 +16,15 @@ import java.net.HttpURLConnection;
 public abstract class AbstractCallBack<T> implements ICallBack<T> {
 
     private String path;
+    public boolean isCancel;
 
     @Override
     public T parsr(HttpURLConnection conn, OnProgressUpdateListener listener) throws AppException {
         try {
+            if (checkIsCancel()) {
+                throw new AppException(AppException.ErrorType.CANCEL, "the request has been cancel");
+            }
+
             int status = conn.getResponseCode();
             if (status == HttpURLConnection.HTTP_OK) {
 
@@ -38,6 +43,9 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                     int totalLen = conn.getContentLength();
 
                     while ((len = is.read(buffer)) != -1) {
+                        if (checkIsCancel()) {
+                            throw new AppException(AppException.ErrorType.CANCEL, "the request has been cancel");
+                        }
                         out.write(buffer, 0, len);
                         currentLen += len;
                         if (listener != null) {
@@ -58,6 +66,9 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                     int len;
 
                     while ((len = is.read(buffer)) != -1) {
+                        if (checkIsCancel()) {
+                            throw new AppException(AppException.ErrorType.CANCEL, "the request has been cancel");
+                        }
                         out.write(buffer, 0, len);
                     }
                     is.close();
@@ -67,15 +78,20 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                     return bindData(result);
                 }
             } else {
-                throw new AppException(status, conn.getResponseMessage());
+                throw new AppException(AppException.ErrorType.SERVER, status, conn.getResponseMessage());
             }
         } catch (Exception e) {
-            throw new AppException(e.getMessage());
+            throw new AppException(AppException.ErrorType.SERVER, e.getMessage());
         }
     }
 
     @Override
     public void onProgressUpdate(long currentLen, long totalLen) {
+    }
+
+    @Override
+    public void cancel(boolean b) {
+        this.isCancel = b;
     }
 
     public abstract T bindData(String result);
@@ -85,4 +101,8 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
         return this;
     }
 
+
+    boolean checkIsCancel() {
+        return this.isCancel;
+    }
 }

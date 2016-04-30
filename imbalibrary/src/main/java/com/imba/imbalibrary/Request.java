@@ -13,9 +13,14 @@ public class Request {
     private int maxRetryCount = 5;
     private ICallBack callBack;
     private OnGlobleExceptionListener listener;
+    private boolean isCancel;
 
     public int getMaxRetryCount() {
         return maxRetryCount;
+    }
+
+    public void setMaxRetryCount(int maxRetryCount) {
+        this.maxRetryCount = maxRetryCount;
     }
 
     public OnGlobleExceptionListener getListener() {
@@ -24,6 +29,15 @@ public class Request {
 
     public void setOnGlobleExceptionListener(OnGlobleExceptionListener listener) {
         this.listener = listener;
+    }
+
+    public void cancel() {
+        this.isCancel = true;
+        this.callBack.cancel(true);
+    }
+
+    public boolean checkIsCanceled() {
+        return isCancel;
     }
 
     public enum RequestMethod {GET, POST, DELETE, PUT}

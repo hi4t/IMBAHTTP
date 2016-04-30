@@ -29,6 +29,11 @@ public class RequestTask extends AsyncTask<Void, Integer, Object> {
 
     private Object request(int retry) {
         try {
+
+            if (request.checkIsCanceled()) {
+                throw new AppException(AppException.ErrorType.CANCEL, "request has been canceled");
+            }
+
             HttpURLConnection connection = ImbaHttp.excute(request);
             return request.getCallBack().parsr(connection, new OnProgressUpdateListener() {
                 @Override

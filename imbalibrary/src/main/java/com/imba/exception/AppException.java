@@ -8,7 +8,7 @@ public class AppException extends Exception {
     private int status;
     private String errMsg;
 
-    public enum ErrorType {TIMEOUT, SERVER, IO, JSON, FILENOTFOUND,NET}
+    public enum ErrorType {CANCEL,TIMEOUT, SERVER, IO, JSON, FILENOTFOUND,NET}
 
     private ErrorType type;
 

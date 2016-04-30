@@ -81,5 +81,6 @@ public class MainActivity extends BaseActivity {
         request.setOnGlobleExceptionListener(this);
         RequestTask task = new RequestTask(request);
         task.execute();
+        request.cancel();
     }
 }
