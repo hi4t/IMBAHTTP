@@ -14,6 +14,11 @@ public class Request {
     private ICallBack callBack;
     private OnGlobleExceptionListener listener;
     private boolean isCancel;
+    private String tag;
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public int getMaxRetryCount() {
         return maxRetryCount;
@@ -38,6 +43,10 @@ public class Request {
 
     public boolean checkIsCanceled() {
         return isCancel;
+    }
+
+    public String getTag() {
+        return this.tag;
     }
 
     public enum RequestMethod {GET, POST, DELETE, PUT}

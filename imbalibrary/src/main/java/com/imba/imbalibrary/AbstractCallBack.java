@@ -56,8 +56,9 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                     is.close();
                     out.flush();
                     out.close();
-                    return bindData(path);
+                    T t = bindData(path);
 
+                    return postResult(t);
                 } else {
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     InputStream is = conn.getInputStream();
@@ -75,7 +76,8 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
                     out.flush();
                     out.close();
                     String result = new String(out.toByteArray());
-                    return bindData(result);
+                    T t = bindData(result);
+                    return postResult(t);
                 }
             } else {
                 throw new AppException(AppException.ErrorType.SERVER, status, conn.getResponseMessage());
@@ -83,6 +85,11 @@ public abstract class AbstractCallBack<T> implements ICallBack<T> {
         } catch (Exception e) {
             throw new AppException(AppException.ErrorType.SERVER, e.getMessage());
         }
+    }
+
+    @Override
+    public T postResult(T t) {
+        return t;
     }
 
     @Override

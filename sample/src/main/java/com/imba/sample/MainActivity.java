@@ -63,6 +63,12 @@ public class MainActivity extends BaseActivity {
 
         Log.i(TAG, path);
         request.setCallBack(new FileCallBack() {
+
+            @Override
+            public String postResult(String s) {//可以不重写，如果不需要在子线程对数据进行操作的话
+                return super.postResult(s);
+            }
+
             @Override
             public void onSuccess(String result) {
                 Log.i(TAG, result);

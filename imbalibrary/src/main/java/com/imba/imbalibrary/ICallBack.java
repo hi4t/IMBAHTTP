@@ -19,4 +19,6 @@ public interface ICallBack<T> {
     void onProgressUpdate(long currentLen, long totalLen);
 
     void cancel(boolean b);
+
+    T postResult(T t);
 }

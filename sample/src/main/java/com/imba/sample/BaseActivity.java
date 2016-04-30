@@ -6,7 +6,7 @@ import com.imba.exception.AppException;
 import com.imba.imbalibrary.OnGlobleExceptionListener;
 
 /**
- * Created by zace on 2016/4/28.
+ * Created by zace on 2015/4/28.
  */
 public class BaseActivity extends AppCompatActivity implements OnGlobleExceptionListener {
     @Override
