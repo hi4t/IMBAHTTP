@@ -1,5 +1,6 @@
 package com.imba.imbalibrary;
 
+import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.imba.exception.AppException;
@@ -36,7 +37,7 @@ public class ImbaHttp {
 
     private static HttpURLConnection get(Request request) throws AppException {
 
-        HttpURLConnection conn = null;
+        HttpURLConnection conn;
         try {
             conn = (HttpURLConnection) new URL(request.getUrl()).openConnection();
             conn.setRequestMethod("GET");
@@ -65,7 +66,20 @@ public class ImbaHttp {
             addHeader(conn, request.getHeader());
 
             OutputStream os = conn.getOutputStream();
-            os.write(request.getContent().getBytes());
+
+            if (!TextUtils.isEmpty(request.getFilePath())) {
+                UploadUtil.upload(os, request.getFilePath(),
+                        request.getUploadListener() == null ? request.getUploadListener() : null);
+            } else if (request.getEntities() != null) {
+                UploadUtil.upload(os, request.getContent(), request.getEntities(),
+                        request.getUploadListener() == null ? request.getUploadListener() : null);
+            } else if (!TextUtils.isEmpty(request.getContent())) {
+                os.write(request.getContent().getBytes());
+            } else {
+                throw new AppException(AppException.ErrorType.MANUAL, "the request content can not be null");
+            }
+
+
         } catch (InterruptedIOException e) {
             throw new AppException(AppException.ErrorType.TIMEOUT, e.getMessage());
         } catch (Exception e) {

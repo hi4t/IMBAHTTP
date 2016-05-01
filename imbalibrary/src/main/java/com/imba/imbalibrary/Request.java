@@ -1,5 +1,6 @@
 package com.imba.imbalibrary;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -17,6 +18,38 @@ public class Request {
     private boolean isCancel;
     private String tag;
     private RequestTask task;
+    private OnProgressUploadListener uploadListener;
+
+    public enum RequestMethod {GET, POST, DELETE, PUT}
+
+    private RequestMethod method;
+
+    private String filePath;
+    private ArrayList<FileEntity> entities;
+
+    public OnProgressUploadListener getUploadListener() {
+        return uploadListener;
+    }
+
+    public void setUploadListener(OnProgressUploadListener uploadListener) {
+        this.uploadListener = uploadListener;
+    }
+
+    public ArrayList<FileEntity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<FileEntity> entities) {
+        this.entities = entities;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
     public void setTag(String tag) {
         this.tag = tag;
@@ -58,10 +91,6 @@ public class Request {
         task = new RequestTask(this);
         task.executeOnExecutor(mExcutor);
     }
-
-    public enum RequestMethod {GET, POST, DELETE, PUT}
-
-    private RequestMethod method;
 
     public ICallBack getCallBack() {
         return callBack;

@@ -16,6 +16,8 @@ import com.imba.imbalibrary.RequestTask;
 import com.imba.util.PermissionsUtil;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends BaseActivity {
 
@@ -97,5 +99,16 @@ public class MainActivity extends BaseActivity {
 //        task.execute();
 //        request.cancel(true);
         RequestManager.getInstance().performRequest(request);
+    }
+
+
+    public void testUpload() {
+        Request request = new Request("");
+        Map<String, String> header = new HashMap<>();
+        header.put("Connection", "Keep-Alive");
+        header.put("Charset", "UTF-8");
+        header.put("Content-Type", "multipart/form-data;boundary=7d4asd5gsad");
+        request.setHeader(header);
+
     }
 }
